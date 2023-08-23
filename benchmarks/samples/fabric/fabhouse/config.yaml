@@ -1,0 +1,46 @@
+test:
+  workers:
+    number: 5
+  rounds:
+    - label: Create a home.
+      # 5000 transactions should create around 1000 homes per worker but not guaranteed
+      # so need to set asset limits to less than 1000 for the other tests
+      txNumber: 5000
+      rateControl:
+        type: fixed-load
+        opts:
+          transactionLoad: 5
+      workload:
+        module: benchmarks/samples/fabric/fabhouse/createHome.js
+    - label: Change home owner.
+      txDuration: 30
+      rateControl:
+        type: fixed-load
+        opts:
+          transactionLoad: 5
+      workload:
+        module: benchmarks/samples/fabric/fabhouse/changeHomeOwner.js
+        arguments:
+          assets: 500
+    - label: Query all homes.
+      txDuration: 30
+      rateControl:
+        type: fixed-load
+        opts:
+          transactionLoad: 5
+      workload:
+        module: benchmarks/samples/fabric/fabhouse/queryAllHomes.js
+        arguments:
+          assets: 500
+          startKey: "1"
+          endKey: "50"
+    - label: Query a home.
+      txDuration: 30
+      rateControl:
+        type: fixed-load
+        opts:
+          transactionLoad: 5
+      workload:
+        module: benchmarks/samples/fabric/fabhouse/queryHome.js
+        arguments:
+          assets: 500
